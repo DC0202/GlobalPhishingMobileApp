@@ -15,3 +15,9 @@ int countFour = 0;
 int countThree = 0;
 int countTwo = 0;
 int countOne = 0;
+
+double defaultWidth = 430.0;
+double defaultHeight = 932.0;
+
+double w = 0.0;
+double h = 0.0;

@@ -3,14 +3,28 @@ import 'package:pymetrics/companyName.dart';
 import 'package:pymetrics/fadeRoute.dart';
 import 'package:pymetrics/result.dart';
 import 'package:pymetrics/values.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-void main() {
-  runApp(
-    const MaterialApp(
-      home: ExampleDragAndDrop(),
-      debugShowCheckedModeBanner: false,
-    ),
-  );
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    //Set the fit size (Find your UI design, look at the dimensions of the device screen and fill it in,unit in dp)
+    return ScreenUtilInit(
+      designSize: const Size(430, 932),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return const MaterialApp(
+          home: ExampleDragAndDrop(),
+          debugShowCheckedModeBanner: false,
+        );
+      },
+    );
+  }
 }
 
 class ExampleDragAndDrop extends StatefulWidget {
@@ -24,10 +38,27 @@ class _ExampleDragAndDropState extends State<ExampleDragAndDrop> {
   final GlobalKey _draggableKey = GlobalKey();
   bool valWidgetDisappear = false;
   int i = 0;
+  bool load = false;
+  double heightMuilti = 0.0;
+  double widthMuilti = 0.0;
 
   @override
   void initState() {
     super.initState();
+    setState(() {
+      w = defaultWidth /
+          MediaQueryData.fromView(WidgetsBinding.instance.window).size.width;
+      h = defaultHeight /
+          MediaQueryData.fromView(WidgetsBinding.instance.window).size.height;
+    });
+    // while (w == null) {
+    //   setState(() {
+    //     load = true;
+    //   });
+    // }
+    // setState(() {
+    //   load = false;
+    // });
   }
 
   void _itemDroppedOnCustomerCart(int indexToBeSelected, String index) {
@@ -78,7 +109,6 @@ class _ExampleDragAndDropState extends State<ExampleDragAndDrop> {
 
   @override
   Widget build(BuildContext context) {
-    // print(companyList[i]);
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F7),
       // appBar: _buildAppBar(),
@@ -87,6 +117,8 @@ class _ExampleDragAndDropState extends State<ExampleDragAndDrop> {
   }
 
   Widget _buildContent(String companyName, index) {
+    debugPrint("$h");
+    debugPrint("$w");
     return Stack(
       children: [
         SafeArea(
@@ -95,14 +127,14 @@ class _ExampleDragAndDropState extends State<ExampleDragAndDrop> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(
-                    height: 20.0,
+                  SizedBox(
+                    height: 20.0 * h,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: SizedBox(
-                      width: 110.0,
-                      height: 50.0,
+                    padding: EdgeInsets.only(left: 20.0 * w),
+                    child: Container(
+                      width: 110.0 * w,
+                      padding: EdgeInsets.symmetric(vertical: 0.0 * h),
                       child: TextButton(
                         onPressed: () {
                           setState(() {
@@ -112,22 +144,22 @@ class _ExampleDragAndDropState extends State<ExampleDragAndDrop> {
                             }
                           });
                         },
-                        child: const Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
                               Icons.undo,
                               color: Colors.black,
-                              size: 30.0,
+                              size: 30.0 * h,
                             ),
                             SizedBox(
-                              width: 5.0,
+                              width: 5.0 * w,
                             ),
                             Text(
                               'Undo',
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 20.0,
+                                fontSize: 20.0 * h,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -136,17 +168,17 @@ class _ExampleDragAndDropState extends State<ExampleDragAndDrop> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 10.0,
+                  SizedBox(
+                    height: 10.0 * h,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                    padding: EdgeInsets.only(left: 20.0 * w, right: 20.0 * w),
                     child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 211.0,
+                      width: MediaQuery.of(context).size.width * h * w,
+                      // height: 211.0 * h,
                       decoration: BoxDecoration(
                         border: Border.all(
-                          width: 2.0,
+                          width: 2.0 * w,
                           color: Colors.black,
                         ),
                         borderRadius: const BorderRadius.all(
@@ -154,8 +186,9 @@ class _ExampleDragAndDropState extends State<ExampleDragAndDrop> {
                         ),
                         color: const Color(0xFFF3F3F3),
                       ),
-                      padding: const EdgeInsets.all(22.0),
-                      child: const Column(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 22.0 * h, horizontal: 22 * w),
+                      child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
@@ -163,17 +196,17 @@ class _ExampleDragAndDropState extends State<ExampleDragAndDrop> {
                               style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w800,
-                                fontSize: 21.0,
+                                fontSize: 21.0 * h,
                               ),
                             ),
                             SizedBox(
-                              height: 20.0,
+                              height: 20.0 * h,
                             ),
                             Text(
                               "NOTE: This is a Card-Sorting Exercise where you have to Drag & Drop the box with the company name in one of the following categorize. Also, you can undo if selected wrong option.",
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 13.0,
+                                fontSize: 13.0 * h,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -187,22 +220,22 @@ class _ExampleDragAndDropState extends State<ExampleDragAndDrop> {
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Colors.black,
-                          width: 2.0,
+                          width: 2.0 * w,
                         ),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(10.0)),
                         color: Colors.white,
                       ),
-                      height: 60.0,
-                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.symmetric(vertical: 22.0 * h),
+                      width: MediaQuery.of(context).size.width * h * w,
                       child: Center(
                         child: Text(
                           index == 0
                               ? "Welcome to Card Sorting Excercise, Let's Start!!"
                               : "${companyList[index - 1].cName} was placed in ${companyList[index - 1].value}",
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 14.0,
+                            fontSize: 14.0 * h,
                           ),
                         ),
                       ),
@@ -211,32 +244,37 @@ class _ExampleDragAndDropState extends State<ExampleDragAndDrop> {
                 ],
               ),
               Positioned(
-                left: 20,
-                top: 330,
+                left: 20 * w,
+                top: 330 * h,
+                //  *
+                //     MediaQueryData.fromView(WidgetsBinding.instance.window)
+                //         .size
+                //         .height /
+                //     defaultHeight,
                 child: _buildWidget("Very\nFamiliar", five, index),
               ),
               Positioned(
-                left: 160,
+                left: 160 * w,
                 top: 370,
                 child: _buildWidget("Familiar", four, index),
               ),
               Positioned(
-                right: 40,
+                right: 40 * w,
                 top: 480,
                 child: _buildWidget("Somewhat\nFamiliar", three, index),
               ),
               Positioned(
-                left: 160,
+                left: 160 * w,
                 top: 590,
                 child: _buildWidget("Known But\nNot Familiar", two, index),
               ),
               Positioned(
-                left: 20,
+                left: 20 * w,
                 top: 630,
                 child: _buildWidget("Unknown", one, index),
               ),
               Positioned(
-                left: 45.0,
+                left: 45.0 * w,
                 top: 510.0,
                 child: Draggable(
                   data: "Familiarity",
@@ -301,12 +339,13 @@ class _ExampleDragAndDropState extends State<ExampleDragAndDrop> {
         return Transform.scale(
           scale: candidateData.isNotEmpty ? 1.3 : 1.0,
           child: Container(
-            width: 110,
-            height: 110,
+            width: 101 * w,
+            height: 101 * w,
+            // padding: EdgeInsets.symmetric(horizontal: 22 * w),
             decoration: BoxDecoration(
               color: candidateData.isNotEmpty ? Colors.black : Colors.white,
               border: Border.all(
-                width: 3.0,
+                width: 3.0 * w,
                 color: candidateData.isNotEmpty ? Colors.white : Colors.black,
               ),
               borderRadius: const BorderRadius.all(
@@ -318,7 +357,7 @@ class _ExampleDragAndDropState extends State<ExampleDragAndDrop> {
                 text,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: candidateData.isNotEmpty ? 16.0 : 14.0,
+                  fontSize: candidateData.isNotEmpty ? 16.0 * h : 14.0 * h,
                   color: candidateData.isNotEmpty ? Colors.white : Colors.black,
                 ),
                 textAlign: TextAlign.center,
@@ -345,12 +384,12 @@ class CompanyNameWidget extends StatelessWidget {
       elevation: 4.0,
       borderRadius: const BorderRadius.all(Radius.circular(7.0)),
       child: Container(
-        width: 162,
-        height: 52,
+        width: 162 * w,
+        height: 52 * h,
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(
-            width: 1.0,
+            width: 1.0 * w,
             color: Colors.black,
           ),
           borderRadius: const BorderRadius.all(
@@ -360,9 +399,9 @@ class CompanyNameWidget extends StatelessWidget {
         child: Center(
           child: Text(
             text,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.w800,
-              fontSize: 18.0,
+              fontSize: 18.0 * h,
             ),
             textAlign: TextAlign.center,
           ),
@@ -394,12 +433,12 @@ class DraggingListItem extends StatelessWidget {
           child: Opacity(
             opacity: 0.8,
             child: Container(
-              width: 162,
-              height: 52,
+              width: 162 * w,
+              height: 52 * h,
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(
-                  width: 1.0,
+                  width: 1.0 * w,
                   color: Colors.black,
                 ),
                 borderRadius: const BorderRadius.all(
@@ -409,9 +448,9 @@ class DraggingListItem extends StatelessWidget {
               child: Center(
                 child: Text(
                   companyName,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.w800,
-                    fontSize: 14.0,
+                    fontSize: 14.0 * h,
                     color: Colors.black,
                   ),
                   textAlign: TextAlign.center,
